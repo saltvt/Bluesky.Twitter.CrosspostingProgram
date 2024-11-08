@@ -1,6 +1,7 @@
 import sys
 import tweepy
 import atproto
+import json
 from atproto import Client
 from datetime import datetime
 from atproto.exceptions import (
@@ -10,14 +11,32 @@ from atproto.exceptions import (
     NetworkError,
     InvalidAtUriError,
 )
-    
-API_KEY="" #Consumer Key
-API_SECRET=""#Consumer Secret
-ACCESS_TOKEN=""#Authentication Token
-ACCESS_TOKEN_SECRET=""#Authentication Secret Token
 
-bskylogin =""
-bskypw =""   
+
+    
+
+
+def loadKeys(file_path):
+    try:
+        with open(file_path, "r") as file:
+            return json.load(file)
+    except FileNotFoundError:
+        print("data.json not in the right directory or doesn't exist! \n {file_path}")
+        sys.exit(1)
+    except json.JSONDecodeError:
+        print(f"JSON format corrupted \n {file_path}")
+        sys.exit(1)
+
+keyFile ="data.json"
+Key = loadKeys(keyFile)
+
+API_KEY= Key["API_KEY"]
+API_SECRET= Key["API_SECRET"]
+ACCESS_TOKEN=Key["ACCESS_TOKEN"]
+ACCESS_TOKEN_SECRET=Key["ACCESS_TOKEN_SECRET"]
+
+bskylogin =Key["bskylogin"]
+bskypw =Key["bskypw"]   
 
 if not all([API_KEY, API_SECRET,ACCESS_TOKEN,ACCESS_TOKEN_SECRET,bskylogin,bskypw]):
     print(f"1 or more data fields were empty. Run config.py")
