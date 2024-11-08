@@ -18,7 +18,7 @@ Dependencies neeeded to run this program:
     -AtProto
     -Normalizer
     -tweepy
-    -Python3.12 \n
+    -Python3.12
     
 To run the program:
     1. Download the files from src into a directory of choice. 
