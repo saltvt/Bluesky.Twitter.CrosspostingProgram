@@ -1,8 +1,8 @@
 **This is a simple python program that crossposts to both X(formerly Twitter) and Bluesky Social Media Platform. Runs in the command line and is designed for Power Users. I made this because there really are no good alternatives outside of Buffer. Constantly tinkering with the code so expect more functionality as time passes. Adding image posting and UI eventually.**
 
-Requires developer account access from twitter. => https://developer.x.com/en \n
+Requires developer account access from twitter. => https://developer.x.com/en
 
-Step 1. Create an application that has Read and Write permissions\n
+Step 1. Create an application that has Read and Write permissions
 ![](images/ApplicationSetup.png)
 ![](images/applicationSetup2.png)
 	
