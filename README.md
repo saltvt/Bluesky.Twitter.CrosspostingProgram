@@ -2,12 +2,12 @@
 
 Requires developer account access from twitter. => https://developer.x.com/en
     Step 1. Create an application that has Read and Write permissions
-    !(images/ApplicationSetup.png)
-    !(images/applicationSetup2.png)
+    ![](images/ApplicationSetup.png)
+    ![](images/applicationSetup2.png)
     Step 2. Make sure to create your consumer keys to connect to the API
-    !(images/KeySetup.png)
+    ![](images/KeySetup.png)
     Step 3. Make sure to create your authentication/access keys for the twitter account of your choice
-    !(AuthenticationTokens.png)
+    ![](AuthenticationTokens.png)
 
 
 Dependencies neeeded to run this program:
