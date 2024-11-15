@@ -86,4 +86,4 @@ print("successful bsky post")
 
 # 11.15.24 Looking to create a UI for image upload, reposting, pulling tweets etc.
 # Work in progress. Basic functionality for advanced users done
-#version 0.0.2
+#version 1.0.0
