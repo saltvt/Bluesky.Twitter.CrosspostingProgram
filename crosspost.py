@@ -2,6 +2,10 @@ import sys
 import tweepy
 import atproto
 import json
+import cryptography.fernet
+import base64
+import os 
+import hashlib
 from atproto import Client
 from datetime import datetime
 from atproto.exceptions import (
@@ -13,25 +17,25 @@ from atproto.exceptions import (
 )
 
 
+def load_decrypted_data():
+    key_file = "encryptionKey.key"
+    data_file = "encryptedData.dat"
     
+    with open(key_file, "rb") as kf:
+        key = kf.read()
+        
+    with open(data_file, "rb") as df:
+        encrypted_data = df.read()
+        
+    f = cryptography.fernet.Fernet(key)
+    decrypted_data = json.loads(f.decrypt(encrypted_data).decode())
+    
+    return decrypted_data
 
-
-def loadKeys(file_path):
-    try:
-        with open(file_path, "r") as file:
-            return json.load(file)
-    except FileNotFoundError:
-        print("data.json not in the right directory or doesn't exist! \n {file_path}")
-        sys.exit(1)
-    except json.JSONDecodeError:
-        print(f"JSON format corrupted \n {file_path}")
-        sys.exit(1)
-
-keyFile ="data.json"
-Key = loadKeys(keyFile)
+Key = load_decrypted_data() #loads the encrypted json file and all the data
 
 API_KEY= Key["API_KEY"]
-API_SECRET= Key["API_SECRET"]
+API_SECRET= Key["API_Secret"]
 ACCESS_TOKEN=Key["ACCESS_TOKEN"]
 ACCESS_TOKEN_SECRET=Key["ACCESS_TOKEN_SECRET"]
 
@@ -77,3 +81,9 @@ post = bskyclient.send_post(tweet)
 print(post.uri)
 
 print("successful bsky post")
+
+
+
+# 11.15.24 Looking to create a UI for image upload, reposting, pulling tweets etc.
+# Work in progress. Basic functionality for advanced users done
+#version 0.0.2
