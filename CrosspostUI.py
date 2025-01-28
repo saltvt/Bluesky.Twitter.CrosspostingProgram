@@ -9,7 +9,7 @@ from atproto.exceptions import (
     NetworkError,
     InvalidAtUriError,
 )
-from PyQt5.QtWidgets import QApplication, QMainWindow, QMenu, QMenuBar, QFileDialog, QTextEdit, QPushButton, QVBoxLayout, QLabel, QRadioButton, QButtonGroup, QWidget
+from PyQt5.QtWidgets import QApplication, QDialogButtonBox, QMainWindow, QMenu, QMenuBar, QFileDialog, QTextEdit, QPushButton, QVBoxLayout, QLabel,QFormLayout, QRadioButton, QButtonGroup, QWidget, QDialog, QLineEdit
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtCore import Qt
 
@@ -17,19 +17,19 @@ class PostApp(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        # **Security Risk: Hardcoded credentials**
-        # Consider using environment variables or a secure storage mechanism
+        
         self.API_KEY = ""
         self.API_SECRET = ""
         self.ACCESS_TOKEN = ""
         self.ACCESS_TOKEN_SECRET = ""
-        self.bsky_login = ""  # Renamed to follow PEP 8 conventions
-        self.bsky_pw = "#"  # Renamed to follow PEP 8 conventions
+        self.bsky_login = "" 
+        self.bsky_pw = "#"  
 
         self.post_twitter = True
         self.post_bsky = True
 
         self.initUI()
+
 
     def initUI(self):
         self.setGeometry(100, 100, 800, 600)
@@ -66,9 +66,22 @@ class PostApp(QMainWindow):
         file_menu = menubar.addMenu('File')
         file_menu.addAction('Exit', self.close)
 
-        platform_menu = menubar.addMenu('Platform')
-        # **Radio buttons not being used effectively**
-        # Replaced with checkbox actions for toggling platforms
+        settings_menu = menubar.addMenu('Settings')
+        
+        self.dlgX = ConfigureXTwitterDialog(self)
+        self.dlgBsky = ConfigureBlueSkyDialog(self)
+        self.dlgMastodon = ConfigureMastodonDialog(self)
+        self.dlgThreads = ConfigureThreadsDialog(self)
+
+
+        settings_menu.addAction('Configure X/Twitter Login', self.openDlgX)
+        settings_menu.addAction('Configure Bluesky Login', self.openDlgBsky)
+        settings_menu.addAction('Configure Mastodon', self.openDlgMastodon)
+        settings_menu.addAction('Configure Threads Login', self.openDlgThreads)
+
+
+
+        platform_menu = menubar.addMenu('Platform')   # Replaced with checkbox actions for toggling platforms
         self.post_twitter_action = platform_menu.addAction('Post to Twitter')
         self.post_twitter_action.setCheckable(True)
         self.post_twitter_action.setChecked(True)
@@ -79,6 +92,18 @@ class PostApp(QMainWindow):
         self.post_bsky_action.setChecked(True)
         self.post_bsky_action.triggered.connect(self.toggle_bsky)
 
+    def openDlgX(self):
+        self.dlgX.show()
+    
+    def openDlgBsky(self):
+        self.dlgBsky.show()
+
+    def openDlgMastodon(self):
+        self.dlgMastodon.show()
+
+    def openDlgThreads(self):
+        self.dlgThreads.show()
+    
     def attach_media(self):
         file_path, _ = QFileDialog.getOpenFileName(self, "Open Media File", "", "Image Files (*.jpg *.png *.jpeg);;Video Files (*.mp4 *.avi *.mov)")
         if file_path:
@@ -130,6 +155,85 @@ class PostApp(QMainWindow):
 
     def toggle_bsky(self):
         self.post_bsky = self.post_bsky_action.isChecked()
+
+class ConfigureXTwitterDialog(QDialog):
+    def __init__(self, parent=None):
+        super(ConfigureXTwitterDialog, self).__init__(parent)
+        self.setWindowTitle("Configure X/Twitter Login")
+        layout = QFormLayout()
+        self.setLayout(layout)
+        
+        # Example Input Field
+        self.twitterHandleInput = QLineEdit()
+        layout.addRow(QLabel("Twitter Handle:"), self.twitterHandleInput)
+        
+        # Dialog Buttons
+        buttons = QDialogButtonBox.Ok | QDialogButtonBox.Cancel
+        buttonBox = QDialogButtonBox(buttons)
+        buttonBox.accepted.connect(self.accept)
+        buttonBox.rejected.connect(self.reject)
+        layout.addRow(buttonBox)
+
+        def getInputs(self):
+            return self.twitterHandleInput.text()
+
+class ConfigureBlueSkyDialog(QDialog):
+    def __init__(self, parent=None):
+        super(ConfigureBlueSkyDialog, self).__init__(parent)
+        self.setWindowTitle("Configure X/Twitter Login")
+        layout = QFormLayout()
+        self.setLayout(layout)
+        
+        # Example Input Field
+        self.twitterHandleInput = QLineEdit()
+        layout.addRow(QLabel("Twitter Handle:"), self.twitterHandleInput)
+        
+        # Dialog Buttons
+        buttons = QDialogButtonBox.Ok | QDialogButtonBox.Cancel
+        buttonBox = QDialogButtonBox(buttons)
+        buttonBox.accepted.connect(self.accept)
+        buttonBox.rejected.connect(self.reject)
+        layout.addRow(buttonBox)
+
+        # Optionally, add a method to retrieve input values when accepted
+        def getInputs(self):
+            return self.twitterHandleInput.text()
+        
+class ConfigureMastodonDialog(QDialog):
+    def __init__(self, parent=None):
+        super(ConfigureMastodonDialog, self).__init__(parent)
+        self.setWindowTitle("Configure X/Twitter Login")
+        layout = QFormLayout()
+        self.setLayout(layout)
+        
+        # Example Input Field
+        self.twitterHandleInput = QLineEdit()
+        layout.addRow(QLabel("Twitter Handle:"), self.twitterHandleInput)
+        
+        # Dialog Buttons
+        buttons = QDialogButtonBox.Ok | QDialogButtonBox.Cancel
+        buttonBox = QDialogButtonBox(buttons)
+        buttonBox.accepted.connect(self.accept)
+        buttonBox.rejected.connect(self.reject)
+        layout.addRow(buttonBox)
+
+class ConfigureThreadsDialog(QDialog):
+    def __init__(self, parent=None):
+        super(ConfigureThreadsDialog, self).__init__(parent)
+        self.setWindowTitle("Configure X/Twitter Login")
+        layout = QFormLayout()
+        self.setLayout(layout)
+        
+        # Example Input Field
+        self.twitterHandleInput = QLineEdit()
+        layout.addRow(QLabel("Twitter Handle:"), self.twitterHandleInput)
+        
+        # Dialog Buttons
+        buttons = QDialogButtonBox.Ok | QDialogButtonBox.Cancel
+        buttonBox = QDialogButtonBox(buttons)
+        buttonBox.accepted.connect(self.accept)
+        buttonBox.rejected.connect(self.reject)
+        layout.addRow(buttonBox)
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
