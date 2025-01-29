@@ -29,7 +29,7 @@ class PostApp(QMainWindow):
         self.ACCESS_TOKEN = ""
         self.ACCESS_TOKEN_SECRET = ""
         self.bsky_login = "" 
-        self.bsky_pw = "#"  
+        self.bsky_pw = ""  
 
         self.post_twitter = True
         self.post_bsky = True
