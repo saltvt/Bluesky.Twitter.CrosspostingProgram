@@ -9,9 +9,15 @@ from atproto.exceptions import (
     NetworkError,
     InvalidAtUriError,
 )
+import os
+import hashlib
+import base64
+import cryptography.fernet
+import getpass
 from PyQt5.QtWidgets import QApplication, QDialogButtonBox, QMainWindow, QMenu, QMenuBar, QFileDialog, QTextEdit, QPushButton, QVBoxLayout, QLabel,QFormLayout, QRadioButton, QButtonGroup, QWidget, QDialog, QLineEdit
 from PyQt5.QtGui import QPixmap
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, pyqtSignal
+
 
 class PostApp(QMainWindow):
     def __init__(self):
@@ -78,6 +84,8 @@ class PostApp(QMainWindow):
         settings_menu.addAction('Configure Bluesky Login', self.openDlgBsky)
         settings_menu.addAction('Configure Mastodon', self.openDlgMastodon)
         settings_menu.addAction('Configure Threads Login', self.openDlgThreads)
+        
+      
 
 
 
@@ -167,6 +175,7 @@ class ConfigureXTwitterDialog(QDialog):
         self.twitterHandleInput = QLineEdit()
         layout.addRow(QLabel("Twitter Handle:"), self.twitterHandleInput)
         
+        
         # Dialog Buttons
         buttons = QDialogButtonBox.Ok | QDialogButtonBox.Cancel
         buttonBox = QDialogButtonBox(buttons)
@@ -180,13 +189,17 @@ class ConfigureXTwitterDialog(QDialog):
 class ConfigureBlueSkyDialog(QDialog):
     def __init__(self, parent=None):
         super(ConfigureBlueSkyDialog, self).__init__(parent)
-        self.setWindowTitle("Configure X/Twitter Login")
+        self.setWindowTitle("Configure Bluesky Login")  # Fixed incorrect title
         layout = QFormLayout()
         self.setLayout(layout)
         
-        # Example Input Field
-        self.twitterHandleInput = QLineEdit()
-        layout.addRow(QLabel("Twitter Handle:"), self.twitterHandleInput)
+        # Corrected input fields
+        self.BlueSkyHandle = QLineEdit()
+        self.BlueSkyPw = QLineEdit()
+        self.BlueSkyPw.setEchoMode(QLineEdit.Password)  # Hide password input
+        
+        layout.addRow(QLabel("Bluesky Handle:"), self.BlueSkyHandle)
+        layout.addRow(QLabel("Enter Password:"), self.BlueSkyPw)
         
         # Dialog Buttons
         buttons = QDialogButtonBox.Ok | QDialogButtonBox.Cancel
@@ -194,11 +207,10 @@ class ConfigureBlueSkyDialog(QDialog):
         buttonBox.accepted.connect(self.accept)
         buttonBox.rejected.connect(self.reject)
         layout.addRow(buttonBox)
-
-        # Optionally, add a method to retrieve input values when accepted
-        def getInputs(self):
-            return self.twitterHandleInput.text()
         
+    def getInputs(self):
+        return self.BlueSkyHandle.text(), self.BlueSkyPw.text()  # Ensure correct retrieval of input
+
 class ConfigureMastodonDialog(QDialog):
     def __init__(self, parent=None):
         super(ConfigureMastodonDialog, self).__init__(parent)
@@ -234,6 +246,9 @@ class ConfigureThreadsDialog(QDialog):
         buttonBox.accepted.connect(self.accept)
         buttonBox.rejected.connect(self.reject)
         layout.addRow(buttonBox)
+
+class PasswordDialog(QDialog):
+    password_entered = pyqtSignal(str)
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
